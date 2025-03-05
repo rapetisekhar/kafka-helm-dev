@@ -1,0 +1,81 @@
+## Global settings
+global:
+  storageClass: "manual"  # Using manually created PVs
+
+## Zookeeper Configuration (Required by Kafka)
+zookeeper:
+  enabled: true
+  replicaCount: 2  # Two Zookeeper replicas (one per worker node)
+  persistence:
+    enabled: true
+  volumeClaimTemplates:
+    - metadata:
+        name: zookeeper-data-0
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: manual
+    - metadata:
+        name: zookeeper-data-1
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: manual
+
+## Kafka Broker Configuration
+kafka:
+  replicaCount: 2  # Two Kafka brokers (one per worker node)
+  listeners:
+    client:
+      protocol: PLAINTEXT
+    interbroker:
+      protocol: PLAINTEXT
+
+  ## Kafka Storage (Persistent Volumes)
+  persistence:
+    enabled: true
+  volumeClaimTemplates:
+    - metadata:
+        name: kafka-data-0
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: manual
+    - metadata:
+        name: kafka-data-1
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: manual
+
+  ## Resource Limits for Production
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "1000m"
+    limits:
+      memory: "4Gi"
+      cpu: "2000m"
+
+  ## Disable External Access
+  externalAccess:
+    enabled: false
+
+## Monitoring (Optional)
+metrics:
+  kafka:
+    enabled: true
+  zookeeper:
+    enabled: true
