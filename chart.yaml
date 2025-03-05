@@ -4,7 +4,7 @@ global:
 
 ## Zookeeper Configuration (Required by Kafka)
 zookeeper:
-  enabled: true
+  enabled: true  # Ensure Zookeeper is enabled
   replicaCount: 2  # Two Zookeeper replicas (one per worker node)
   persistence:
     enabled: true
@@ -30,12 +30,17 @@ zookeeper:
 
 ## Kafka Broker Configuration
 kafka:
+  enabled: true  # Ensure Kafka is enabled
   replicaCount: 2  # Two Kafka brokers (one per worker node)
   listeners:
     client:
       protocol: PLAINTEXT
     interbroker:
       protocol: PLAINTEXT
+
+  ## Kafka Controller Configuration (Disable for Zookeeper mode)
+  controller:
+    replicaCount: 0  # Ensure controllers are disabled in Zookeeper mode
 
   ## Kafka Storage (Persistent Volumes)
   persistence:
